@@ -162,21 +162,18 @@ class MyCard extends StatelessWidget {
                   ),
                 ],
               ),
-              IconButton(
-                iconSize: 15,
-                icon: Icon(
-                  Icons.favorite,
-                  color: Colors.red,
-                ),
-                onPressed: () {},
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: 'Add a comment'),
-                ),
+              TextFormField(
+                decoration: new InputDecoration(
+                    border: UnderlineInputBorder(),
+                    prefixIcon: IconButton(
+                      onPressed: () {},
+                      iconSize: 15,
+                      icon: Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      ),
+                    ),
+                    labelText: 'Add a comment'),
               ),
             ],
           ),
