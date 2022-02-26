@@ -1,8 +1,9 @@
-import 'dart:math';
+///import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'covid_model.dart';
+import 'model.dart';
+import 'comment.dart';
 
 void main() {
   const app = MyApp();
@@ -47,24 +48,46 @@ class Test extends StatelessWidget {
         user_img: 'profile_pic1',
         user_post: 'Baekhyunee_EXO',
         post_detail:
-            '앞으로 보여질 저 백현이의 많은 모습들을 기대해주시고 사랑해주세요!^^ Please look forward to my varieties and activities of Baekhyun. I need your love!',
-        img_post: 'baekhyunee_img'),
+            '앞으로 보여질 저 백현이의 많은 모습들을\n 기대해주시고 사랑해주세요!^^\n Please look forward to my varieties\n and activities of Baekhyun.\n I need your love!',
+        img_post: 'baekhyunee_img',
+        cm_text: [
+          UserComment(
+              user_comment: 'wanwan:', detail_comment: 'I always love you.<3')
+        ]),
     MyLoveWan(
         user_img: 'profile_pic2',
         user_post: 'MyVitamin_B',
         post_detail: 'Doing the thing you love<3.',
-        img_post: 'myvitaminb_img'),
+        img_post: 'myvitaminb_img',
+        cm_text: [
+          UserComment(user_comment: 'Baekhyunee_EXO:', detail_comment: '<3')
+        ]),
     MyLoveWan(
         user_img: 'profile_pic3',
         user_post: 'wwwwanbbh',
         post_detail: 'Together with you is my favorite place to be.',
-        img_post: 'wan_img'),
+        img_post: 'wan_img',
+        cm_text: [
+          UserComment(user_comment: 'Gai:', detail_comment: 'น่ารักจังอะวั่น'),
+          UserComment(user_comment: 'Bo:', detail_comment: 'น่ารักจังวั่น'),
+          UserComment(user_comment: 'Moi:', detail_comment: 'คาวาอี้'),
+          UserComment(
+              user_comment: 'Hmu:', detail_comment: 'ว่านนนนน่าร้ากอ้า'),
+          UserComment(
+              user_comment: 'Fern Bad:',
+              detail_comment: 'มือสวยกว่าหน้ากุอีกอ่ะ')
+        ]),
     MyLoveWan(
         user_img: 'profile_pic4',
         user_post: 'WeareoneEXO',
         post_detail:
-            "We all were honored for fans to give us the big awards here, MAMA last year, and again, thank you sincerely for giving us the biggest awards this year. First of all, Teacher Lee SooMan, SM TOWN family, manager brothers, and our lovers, members and our parents. Our EXO is fans all around the globe, I heartily thank you. Every time we received the big awards, I couldn't be merely happy. Because I thought we didn't deserve those and many thoughts came up to us. Now, this moment, 11 o'clock 43 minutes 34 second, Friday November 22nd, 2013. I will never forget, enjoying this very moment and try our best all the time. Thanks and love you. Let's love, EXO.",
-        img_post: 'exo_img'),
+            "We all were honored for fans to give us the big awards here,\n MAMA last year, and again,\n thank you sincerely for giving us\n the biggest awards this year.\n First of all, Manager brothers, and our lovers, members and our parents.\n Our EXO is fans all around the globe,\n I heartily thank you. Every time we received the big awards,\n I couldn't be merely happy.\n Because I thought we didn't deserve those and many thoughts came up to us.\n Now, this moment, 11 o'clock 43 minutes 34 second, Friday November 22nd, 2013.\n I will never forget, enjoying this very moment and try our best all the time.\n Thanks and love you. Let's love, EXO.",
+        img_post: 'exo_img',
+        cm_text: [
+          UserComment(
+              user_comment: 'wanwan:',
+              detail_comment: 'I always love you, we are one.<3')
+        ]),
   ];
 
   @override
@@ -82,7 +105,7 @@ class Test extends StatelessWidget {
         child: ListView.builder(
             itemCount: MyloveList.length,
             itemBuilder: (context, index) =>
-                MyCard(Mylove_post: MyloveList[index])),
+                MyCard(listPost: MyloveList[index])),
 
         ///backgroundColor: Color.fromRGBO(90, 107, 206, 100.0),
       ),
@@ -90,13 +113,33 @@ class Test extends StatelessWidget {
   }
 }
 
-class MyCard extends StatelessWidget {
-  final MyLoveWan Mylove_post;
+class MyCard extends StatefulWidget {
+  final MyLoveWan listPost;
 
-  const MyCard({
+  MyCard({
     Key? key,
-    required this.Mylove_post,
+    required this.listPost,
+    ////required this.Mylove_post,
   }) : super(key: key);
+
+  @override
+  State<MyCard> createState() => _MyCardstate();
+}
+
+class _MyCardstate extends State<MyCard> {
+  var result = '';
+  bool addFavorit = false;
+  final TextEditingController _textEdit = new TextEditingController();
+
+  String allComment() {
+    for (var i = 0; i < widget.listPost.cm_text.length; i++) {
+      result += widget.listPost.cm_text[i].user_comment +
+          ' ' +
+          widget.listPost.cm_text[i].detail_comment +
+          '\n';
+    }
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,15 +163,19 @@ class MyCard extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 25,
                       backgroundImage: AssetImage(
-                          'assets/images/${Mylove_post.user_img}.jpg'),
+                          'assets/images/${widget.listPost.user_img}.jpg'),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Text(Mylove_post.user_post,
+                    child: Text(widget.listPost.user_post,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   ),
+                  Expanded(
+                      child: Container(
+                    width: 50,
+                  )),
                   IconButton(
                     iconSize: 25,
                     icon: Icon(Icons.more_vert),
@@ -144,7 +191,7 @@ class MyCard extends StatelessWidget {
                   ///padding: const EdgeInsets.symmetric(vertical: 50.0),
                   Expanded(
                     child: Image.asset(
-                      'assets/images/${Mylove_post.img_post}.jpg',
+                      'assets/images/${widget.listPost.img_post}.jpg',
                       width: 100.0,
                       fit: BoxFit.fill,
                     ),
@@ -157,23 +204,42 @@ class MyCard extends StatelessWidget {
                     padding: const EdgeInsets.all(15.0),
                     child: Expanded(
                         child: Text(
-                            '${Mylove_post.user_post} : ${Mylove_post.post_detail}',
+                            '${widget.listPost.user_post} : ${widget.listPost.post_detail}',
                             overflow: TextOverflow.ellipsis)),
                   ),
                 ],
               ),
-              TextFormField(
-                decoration: new InputDecoration(
-                    border: UnderlineInputBorder(),
-                    prefixIcon: IconButton(
-                      onPressed: () {},
-                      iconSize: 15,
-                      icon: Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                      ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Expanded(
+                        child: Text(allComment(),
+                            overflow: TextOverflow.ellipsis)),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _textEdit,
+                    textAlign: TextAlign.start,
+                    decoration: new InputDecoration(
+                      prefixIcon: IconButton(
+                          icon: Icon(addFavorit ? Icons.favorite : Icons.favorite_border),
+                          onPressed: () {
+                            setState(() {
+                              addFavorit = !addFavorit;
+                            });
+                          }),
+                      hintText: "Add a comment",
                     ),
-                    labelText: 'Add a comment'),
+                    onSubmitted: (String str) {
+                      setState(() {
+                        widget.listPost.addComment('Your Love: ', str);
+                        _textEdit.clear();
+                      });
+                  }),
               ),
             ],
           ),
@@ -183,169 +249,5 @@ class MyCard extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key) {}
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
 
-class _HomePageState extends State<HomePage> {
-  var _input = '';
-  var _feedbackText = 'ทายเลข 1 ถึง 100';
-
-  void _showOkDialog(BuildContext context, String title, String content) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('MY LOVE IS: '),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.purple.shade50,
-            borderRadius: BorderRadius.circular(16.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.purple.shade100,
-                offset: Offset(5.0, 5.0),
-                spreadRadius: 2.0,
-                blurRadius: 5.0,
-              )
-            ],
-          ),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/guess_logo.png', width: 90.0),
-                    SizedBox(width: 8.0),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('GUESS',
-                            style: TextStyle(
-                                fontSize: 36.0, color: Colors.purple.shade200)),
-                        Text(
-                          'THE NUMBER',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.purple.shade600,
-                            //fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Text(_input, style: TextStyle(fontSize: 50.0)),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(_feedbackText, style: TextStyle(fontSize: 20.0)),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 1; i <= 3; i++) _buildButton(num: i),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 4; i <= 6; i++) _buildButton(num: i),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 7; i <= 9; i++) _buildButton(num: i),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildButton(num: -2),
-                  _buildButton(num: 0),
-                  _buildButton(num: -1),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  child: Text('GUESS'),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton({int? num}) {
-    Widget child = Text('$num', style: TextStyle(fontSize: 20.0));
-    if (num == -2) {
-      child = Icon(Icons.close);
-    } else if (num == -1) {
-      child = Icon(Icons.backspace_outlined);
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(6.0),
-      child: OutlinedButton(
-        onPressed: () {
-          setState(() {
-            if (num == -2) {
-              setState(() {
-                _input = '';
-              });
-            } else if (num == -1) {
-              if (_input.length > 0) {
-                setState(() {
-                  _input = _input.substring(0, _input.length - 1);
-                });
-              }
-            } else {
-              if (_input.length >= 3) return;
-
-              setState(() {
-                _input = '$_input$num';
-              });
-            }
-          });
-        },
-        child: child,
-      ),
-    );
-  }
-}
